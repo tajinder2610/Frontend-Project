@@ -50,7 +50,7 @@ function Watchlist() {
     <>
       {/* Searchbar */}
       <div className="flex justify-center my-10">
-        <input placeholder="Hi! What's Your Favourite Movie? Search Here" className="rounded-xl h=[4rem] w-[23rem] bg-gray200 px-4 outline-none border border-slate-600" type="text" onChange={handleSearch} value={search}/>
+        <input placeholder="Search Your Watchlist" className="rounded-xl h=[4rem] w-[12rem] bg-gray200 px-4 outline-none border border-slate-600" type="text" onChange={handleSearch} value={search}/>
       </div>
 
       {/* Genres */}
