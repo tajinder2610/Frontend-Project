@@ -116,8 +116,8 @@ function Watchlist() {
                       {movieObj.title}
                     </div>
                   </td>
-                  <td className="pl-6 py-4">{Math.floor(parseInt(movieObj.vote_average).toFixed(1))}</td>
-                  <td className="pl-6 py-4">{Math.floor(parseInt(movieObj.popularity).toFixed(1))}</td>
+                  <td className="pl-6 py-4">{parseInt(movieObj.vote_average).toFixed(1)}</td>
+                  <td className="pl-6 py-4">{parseInt(movieObj.popularity).toFixed(1)}</td>
                   <td className="pl-2 py-4">
                     {genreids[movieObj.genre_ids[0]]}
                   </td>
