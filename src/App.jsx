@@ -1,6 +1,6 @@
 import "./App.css";
 import { Routes, Route } from "react-router";
-import Watchlist from "./components/Watchlist";
+import Watchlist from "./components/WatchList";
 import Header from "./components/Header";
 import Home from "./components/Home";
 import MovieContextWrapper from "./context/MovieContext";
