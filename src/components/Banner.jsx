@@ -15,10 +15,14 @@ function Banner() {
         getData();
     })
   return (
-    <div className ="h-[20vh] md:h-[75vh] bg-cover flex items-end" style={{backgroundImage:`url(${bannerImage})`}}>
-        <div className='text-white w-full text-center text-2xl'>{movieTitle}</div>
+  <div className="h-[20vh] md:h-[75vh] bg-cover bg-center flex items-end" style={{ backgroundImage: `url(${bannerImage})` }}>
+    <div className="w-full text-center">
+      <div className="inline-block bg-black/60 text-white text-2xl px-4 py-2 mb-4 rounded">
+        {movieTitle}
+      </div>
     </div>
-  )
+  </div>
+);
 }
 
 export default Banner

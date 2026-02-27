@@ -80,12 +80,12 @@ function Watchlist() {
   }, [watchlist, search, currGenre]);
 
   return (
-    <>
+    <div className="pt-20">
       {/* Searchbar */}
       <div className="flex justify-center my-10">
         <input
           placeholder="Search Your Watchlist"
-          className="rounded-xl h-[4rem] w-[12rem] bg-gray200 px-4 outline-none border border-slate-600"
+          className="rounded-xl h-[3rem] w-[12rem] bg-gray200 px-4 outline-none border border-slate-600"
           type="text"
           onChange={handleSearch}
           value={search}
@@ -173,7 +173,7 @@ function Watchlist() {
           </tbody>
         </table>
       </div>
-    </>
+    </div>
   );
 }
 
