@@ -16,7 +16,10 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/watchlist" element={<Watchlist />} />
-          <Route path="*" element={<div>404 Page Not Found</div>} />
+          <Route path="*" element={
+              <div className="flex items-center justify-center h-screen"><h2 className="text-3xl font-bold">404 Page Not Found</h2></div>
+            } 
+          />
         </Routes>
       </Suspense>
     </MovieContextWrapper>
