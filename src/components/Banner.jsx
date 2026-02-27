@@ -20,7 +20,7 @@ function Banner() {
   return (
     <div
       className="
-        pt-[6rem] 
+        pt-0 sm:pt-[6rem]     /* No padding on desktop, add padding only on mobile */
         h-[25vh] sm:h-[40vh] md:h-[75vh] 
         bg-center bg-cover flex items-end"
       style={{ backgroundImage: `url(${bannerImage})` }}
