@@ -12,7 +12,7 @@ const paginationSlice = createSlice({
             }
         },
         handlePrevious: (state) => {
-            if(state.pageNo>0) {
+            if(state.pageNo>1) {
                 state.pageNo -=1 
             }
         }

@@ -1,68 +1,115 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useCallback,
+  useMemo,
+} from "react";
 import genreids from "../utility";
 import { MovieContext } from "../context/MovieContext";
+
 function Watchlist() {
-  const {watchlist, setWatchlist, removeFromWatchlist} = useContext(MovieContext);
-  const [search,setSearch] = useState("");
+  const { watchlist, setWatchlist, removeFromWatchlist } =
+    useContext(MovieContext);
+
+  const [search, setSearch] = useState("");
   const [genreList, setGenreList] = useState([]);
   const [currGenre, setCurrGenre] = useState("All Genres");
-  
 
-  const handleAscendingRatings = () => {
-    console.log("sorting low to high");
-    let sortedAscending = watchlist.sort((objA, objB) => {
-      return objA.vote_average - objB.vote_average;
-    });
-    console.log(sortedAscending);
+  // ✅ Sort Low → High
+  const handleAscendingRatings = useCallback(() => {
+    const sorted = [...watchlist].sort(
+      (a, b) => a.vote_average - b.vote_average
+    );
+    setWatchlist(sorted);
+  }, [watchlist, setWatchlist]);
 
-    setWatchlist([...sortedAscending]);
-  };
+  // ✅ Sort High → Low
+  const handleDescendingRatings = useCallback(() => {
+    const sorted = [...watchlist].sort(
+      (a, b) => b.vote_average - a.vote_average
+    );
+    setWatchlist(sorted);
+  }, [watchlist, setWatchlist]);
 
-  const handleDescendingRatings = () => {
-    console.log("sorting high to low");
-    let sortedDescending = watchlist.sort((objA, objB) => {
-      return objB.vote_average - objA.vote_average;
-    });
-    setWatchlist([...sortedDescending]);
-  };
-
-  useEffect(() => {
-    let moviesFromLocalStorage = localStorage.getItem("watchlist");
-    if (!moviesFromLocalStorage) return;
-    setWatchlist(JSON.parse(moviesFromLocalStorage));
+  // ✅ Search Handler
+  const handleSearch = useCallback((e) => {
+    setSearch(e.target.value);
   }, []);
 
-  const handleSearch = (e) => {
-    setSearch(e.target.value);
-  }
+  // ✅ Genre Click
+  const handleGenreClick = useCallback((genre) => {
+    setCurrGenre(genre);
+  }, []);
 
+  // ✅ Delete Handler
+  const handleDelete = useCallback(
+    (movie) => {
+      removeFromWatchlist(movie);
+    },
+    [removeFromWatchlist]
+  );
+
+  // ✅ Load from localStorage
   useEffect(() => {
-    const allGneres = watchlist.map(movieObj => {
-        return genreids[movieObj.genre_ids[0]]
-    });
-    const uniqueGenres = new Set(allGneres);
-    console.log(uniqueGenres);
-    setGenreList(["All Genres",...uniqueGenres])
-    
+    const movies = localStorage.getItem("watchlist");
+    if (!movies) return;
+    setWatchlist(JSON.parse(movies));
+  }, [setWatchlist]);
+
+  // ✅ Generate Genre List
+  useEffect(() => {
+    const allGenres = watchlist.map(
+      (movie) => genreids[movie.genre_ids[0]]
+    );
+    const uniqueGenres = new Set(allGenres);
+    setGenreList(["All Genres", ...uniqueGenres]);
   }, [watchlist]);
+
+  // ✅ Memoized Filtering (Expensive Calculation)
+  const filteredMovies = useMemo(() => {
+    return watchlist
+      .filter((movie) =>
+        movie.title.toLowerCase().includes(search.toLowerCase())
+      )
+      .filter((movie) =>
+        currGenre === "All Genres"
+          ? true
+          : genreids[movie.genre_ids[0]] === currGenre
+      );
+  }, [watchlist, search, currGenre]);
 
   return (
     <>
       {/* Searchbar */}
       <div className="flex justify-center my-10">
-        <input placeholder="Search Your Watchlist" className="rounded-xl h=[4rem] w-[12rem] bg-gray200 px-4 outline-none border border-slate-600" type="text" onChange={handleSearch} value={search}/>
+        <input
+          placeholder="Search Your Watchlist"
+          className="rounded-xl h-[4rem] w-[12rem] bg-gray200 px-4 outline-none border border-slate-600"
+          type="text"
+          onChange={handleSearch}
+          value={search}
+        />
       </div>
 
       {/* Genres */}
       <div className="flex justify-center gap-2">
-        {genreList.map(genre => {
-            return (
-                <div className={currGenre==genre ? "flex justify-center items-center h-[3rem] w-[9rem] bg-blue-400 rounded-xl text-white" : "flex justify-center items-center h-[3rem] w-[9rem] bg-gray-400/50 rounded-xl text-white"} onClick={()=>setCurrGenre(genre)}>{genre}</div>
-            )
-        })}
+        {genreList.map((genre) => (
+          <div
+            key={genre}
+            className={
+              currGenre === genre
+                ? "flex justify-center items-center h-[3rem] w-[9rem] bg-blue-400 rounded-xl text-white cursor-pointer"
+                : "flex justify-center items-center h-[3rem] w-[9rem] bg-gray-400/50 rounded-xl text-white cursor-pointer"
+            }
+            onClick={() => handleGenreClick(genre)}
+          >
+            {genre}
+          </div>
+        ))}
       </div>
-      
-      {/* Watchlist */}
+
+      {/* Watchlist Table */}
       <div className="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5">
         <table className="w-full bg-white text-left text-sm text-gray-500">
           <thead>
@@ -71,61 +118,58 @@ function Watchlist() {
               <th>
                 <div className="flex align-centre gap-2">
                   <i
-                    class="fa-solid fa-arrow-up"
+                    className="fa-solid fa-arrow-up cursor-pointer"
                     onClick={handleAscendingRatings}
                   ></i>
                   <div>Ratings</div>
                   <i
-                    class="fa-solid fa-arrow-down"
+                    className="fa-solid fa-arrow-down cursor-pointer"
                     onClick={handleDescendingRatings}
                   ></i>
                 </div>
               </th>
-              <th>
-                <div className="flex">
-                  <div>Popularity</div>
-                </div>
-              </th>
-              <th>
-                <div className="flex">
-                  <div>Genre</div>
-                </div>
-              </th>
-              <th>
-                <div className="flex">
-                  <div>Delete Movies</div>
-                </div>
-              </th>
+              <th>Popularity</th>
+              <th>Genre</th>
+              <th>Delete Movies</th>
             </tr>
           </thead>
+
           <tbody className="divide-y divide-gray-100 border-t border-gray-100">
-            {watchlist.filter(movieObj => movieObj.title.toLowerCase().includes(search.toLowerCase()))
-            .filter(movieObj => {
-                if(currGenre == "All Genres") return true;
-                return genreids[movieObj.genre_ids[0]] == currGenre})
-            .map((movieObj) => {
-              return (
-                <tr className="hover:bg-gray-50">
-                  <td className="flex items-center px-6 py-4 font-normal text-gray-900 gap-3">
-                    <img
-                      className="h-[10rem] w-[6rem] object-fit"
-                      src={`https://image.tmdb.org/t/p/w500/${movieObj.poster_path}`}
-                      alt=""
-                    />
-                    <div className="font-medium text-gray-700 text-xl">
-                      {movieObj.title}
-                    </div>
-                  </td>
-                  <td className="pl-6 py-4">{parseInt(movieObj.vote_average).toFixed(1)}</td>
-                  <td className="pl-6 py-4">{parseInt(movieObj.popularity).toFixed(1)}</td>
-                  <td className="pl-2 py-4">
-                    {genreids[movieObj.genre_ids[0]]}
-                  </td>
-                  <td><button onClick={()=>removeFromWatchlist(movieObj)} className="text-red-500">Delete</button></td>
-                </tr>
-              );
-            })}
-            
+            {filteredMovies.map((movie) => (
+              <tr key={movie.id} className="hover:bg-gray-50">
+                <td className="flex items-center px-6 py-4 font-normal text-gray-900 gap-3">
+                  <img
+                    className="h-[10rem] w-[6rem] object-cover"
+                    src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+                    alt=""
+                  />
+                  <div className="font-medium text-gray-700 text-xl">
+                    {movie.title}
+                  </div>
+                </td>
+
+                <td className="pl-6 py-4">
+                  {parseFloat(movie.vote_average).toFixed(1)}
+                </td>
+
+                <td className="pl-6 py-4">
+                  {parseFloat(movie.popularity).toFixed(1)}
+                </td>
+
+                <td className="pl-2 py-4">
+                  {genreids[movie.genre_ids[0]]}
+                </td>
+
+                <td>
+                  <button
+                    onClick={() => handleDelete(movie)}
+                    className="text-red-500"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
