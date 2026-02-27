@@ -19,10 +19,12 @@ function Banner() {
 
   return (
     <div
-      className="
-        pt-[6rem] md:pt-0    /* add top padding on mobile, remove for desktop */
+      className={`
+        relative
+        mt-16 md:mt-0      /* Add top margin on mobile to push banner below header */
         h-[25vh] sm:h-[40vh] md:h-[75vh]
-        bg-center bg-cover flex items-end"
+        bg-center bg-cover flex items-end
+      `}
       style={{ backgroundImage: `url(${bannerImage})` }}
     >
       <div className="w-full text-center px-2">
