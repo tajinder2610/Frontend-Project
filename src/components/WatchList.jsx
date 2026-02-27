@@ -80,7 +80,7 @@ function Watchlist() {
   }, [watchlist, search, currGenre]);
 
   return (
-    <div className="pt-20">
+    <div className="pt-[6rem] px-2 sm:px-4 md:px-8">
       {/* Searchbar */}
       <div className="flex justify-center my-10">
         <input
@@ -139,9 +139,9 @@ function Watchlist() {
               <tr key={movie.id} className="hover:bg-gray-50">
                 <td className="flex items-center px-6 py-4 font-normal text-gray-900 gap-3">
                   <img
-                    className="h-[10rem] w-[6rem] object-cover"
+                    className="h-[10rem] w-[6rem] object-cover rounded"
                     src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-                    alt=""
+                    alt={movie.title}
                   />
                   <div className="font-medium text-gray-700 text-xl">
                     {movie.title}
