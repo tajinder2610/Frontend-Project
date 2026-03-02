@@ -33,12 +33,8 @@ function Watchlist() {
   }, [watchlist, setWatchlist]);
 
   const handleSearch = (e) => setSearch(e.target.value);
-
   const handleDelete = (movie) => removeFromWatchlist(movie);
-
-  const handleGenreClick = (genre) => {
-    setCurrGenre(genre);
-  };
+  const handleGenreClick = (genre) => setCurrGenre(genre);
 
   // Load from localStorage
   useEffect(() => {
@@ -70,7 +66,7 @@ function Watchlist() {
 
   return (
     <div className="mt-20 px-4 sm:px-8">
-
+      
       {/* Searchbar */}
       <div className="flex justify-center my-10">
         <input
@@ -103,18 +99,18 @@ function Watchlist() {
         ))}
       </div>
 
-      {/* 📊 TABLE */}
+      {/* TABLE */}
       <div className="flex justify-center overflow-x-auto">
-        <table className="w-full max-w-6xl bg-white text-left text-sm sm:text-base text-gray-600 shadow-lg rounded-lg overflow-hidden">
+        <table className="table-auto w-full max-w-6xl bg-white text-left text-sm sm:text-base text-gray-600 shadow-lg rounded-lg overflow-hidden">
           
           <thead>
             <tr className="bg-gray-100">
-              <th className="px-6 py-4 font-semibold text-gray-900">
+              
+              <th className="px-2 sm:px-6 py-2 sm:py-4 font-semibold text-gray-900">
                 Name
               </th>
 
-              {/* ⭐ SORTING ARROWS BACK */}
-              <th className="px-6 py-4">
+              <th className="px-2 sm:px-6 py-2 sm:py-4">
                 <div className="flex items-center gap-2">
                   <i
                     className="fa-solid fa-arrow-up cursor-pointer"
@@ -128,11 +124,19 @@ function Watchlist() {
                 </div>
               </th>
 
-              <th className="px-6 py-4">Popularity</th>
-              <th className="px-6 py-4 hidden sm:table-cell">
+              {/* Hide Popularity on mobile */}
+              <th className="px-2 sm:px-6 py-2 sm:py-4 hidden sm:table-cell">
+                Popularity
+              </th>
+
+              <th className="px-2 sm:px-6 py-2 sm:py-4 hidden sm:table-cell">
                 Genre
               </th>
-              <th className="px-6 py-4 text-center">Delete</th>
+
+              <th className="px-2 sm:px-6 py-2 sm:py-4 text-center">
+                Delete
+              </th>
+
             </tr>
           </thead>
 
@@ -140,36 +144,38 @@ function Watchlist() {
             {filteredMovies.map((movie) => (
               <tr key={movie.id} className="hover:bg-gray-50">
 
-                {/* 🎬 BIGGER POSTER */}
-                <td className="flex items-center px-6 py-4 gap-5">
+                {/* Name Column */}
+                <td className="flex items-center px-2 sm:px-6 py-2 sm:py-4 gap-3 sm:gap-5 min-w-[180px]">
                   <img
-                    className="h-40 w-28 object-cover rounded-lg shadow-md"
+                    className="h-24 w-16 sm:h-40 sm:w-28 object-cover rounded-lg shadow-md"
                     src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
                     alt={movie.title}
                   />
-                  <div className="font-semibold text-gray-800 text-lg">
+                  <div className="font-semibold text-gray-800 text-sm sm:text-lg truncate max-w-[120px] sm:max-w-none">
                     {movie.title}
                   </div>
                 </td>
 
-                <td className="px-6 py-4">
+                <td className="px-2 sm:px-6 py-2 sm:py-4">
                   {parseFloat(movie.vote_average).toFixed(1)}
                 </td>
 
-                <td className="px-6 py-4">
+                {/* Hide Popularity on mobile */}
+                <td className="px-2 sm:px-6 py-2 sm:py-4 hidden sm:table-cell">
                   {parseFloat(movie.popularity).toFixed(1)}
                 </td>
 
-                <td className="px-6 py-4 hidden sm:table-cell">
+                <td className="px-2 sm:px-6 py-2 sm:py-4 hidden sm:table-cell">
                   {genreids[movie.genre_ids[0]]}
                 </td>
 
-                <td className="px-6 py-4 text-center">
+                <td className="px-2 sm:px-6 py-2 sm:py-4 text-center">
                   <i
                     className="fa-solid fa-trash text-red-500 cursor-pointer hover:scale-125 transition"
                     onClick={() => handleDelete(movie)}
                   ></i>
                 </td>
+
               </tr>
             ))}
           </tbody>
