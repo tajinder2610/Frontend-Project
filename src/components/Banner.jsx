@@ -20,23 +20,22 @@ function Banner() {
   return (
     <div
       className="
-        pt-[6rem] md:pt-0    /* add top padding on mobile, remove for desktop */
-        h-[25vh] sm:h-[40vh] md:h-[75vh]
-        bg-center bg-cover flex items-end"
+        mt-16
+        h-[30vh] sm:h-[45vh] md:h-[75vh]
+        bg-center bg-cover flex items-end
+      "
       style={{ backgroundImage: `url(${bannerImage})` }}
     >
-      <div className="w-full text-center px-2">
+      <div className="w-full text-center px-2 pb-6">
         <div
           className="
             inline-block 
             bg-black/60 text-white 
-            text-[0.65rem] sm:text-[0.85rem] md:text-2xl 
-            px-2 py-1 sm:px-4 sm:py-2 md:px-6 md:py-3 
+            text-base sm:text-2xl md:text-4xl
+            px-4 py-2 sm:px-8 sm:py-3
             rounded
-            mb-4
             truncate max-w-full
           "
-          title={movieTitle}
         >
           {movieTitle}
         </div>
