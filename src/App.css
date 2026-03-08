@@ -75,17 +75,17 @@
 }
 
 .neon-logo {
-  --logo-accent: #00f5ff;
+
   font-size: 28px;
   font-weight: 800;
-  display: inline-block;
-  transform: translateY(-0.24em);
-  color: var(--logo-accent);
+  color: #00f5ff;
+
+
   letter-spacing: 2px;
   text-shadow: 
-    0 0 5px var(--logo-accent),
-    0 0 10px var(--logo-accent),
-    0 0 20px var(--logo-accent);
+    0 0 5px #00f5ff,
+    0 0 10px #00f5ff,
+    0 0 20px #00f5ff;
 }
 
 .logo-with-monkey {
@@ -113,20 +113,12 @@
 }
 
 .play-o {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: inline-block;
   margin: 0 4px;
-  line-height: 1;
-}
-
-.play-o-gif {
-  width: 2.25em;
-  height: 2.25em;
-  object-fit: contain;
-  display: block;
-  border-radius: 3px;
-  transform: translateY(0.18em);
+  color: #8b5cf6;
+  text-shadow:
+    0 0 5px #8b5cf6,
+    0 0 15px #8b5cf6;
 }
 
 .movie-list-page {
