@@ -7,6 +7,9 @@ import MovieContextWrapper from "./context/MovieContext";
 import Spinner from "./components/Spinner";
 
 const Watchlist = lazy(() => import("./components/WatchList"));
+const PerformanceBenchmark = lazy(() =>
+  import("./components/PerformanceBenchmark")
+);
 
 function App() {
   return (
@@ -17,6 +20,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/watchlist" element={<Watchlist />} />
+          <Route path="/benchmark" element={<PerformanceBenchmark />} />
           <Route
             path="*"
             element={
