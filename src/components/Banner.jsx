@@ -20,7 +20,7 @@ function Banner() {
   return (
     <div
       className="
-        mt-16
+        mt-24
         h-[30vh] sm:h-[45vh] md:h-[75vh]
         bg-center bg-cover flex items-end
       "
@@ -31,7 +31,7 @@ function Banner() {
           className="
             inline-block 
             bg-black/60 text-white 
-            text-base sm:text-2xl md:text-4xl
+            text-sm sm:text-xl md:text-3xl
             px-4 py-2 sm:px-8 sm:py-3
             rounded
             truncate max-w-full

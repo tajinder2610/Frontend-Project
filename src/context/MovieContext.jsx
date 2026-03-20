@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import toast from "react-hot-toast";
 export const MovieContext = React.createContext();
 
 export default function MovieContextWrapper({children}){
@@ -8,6 +9,9 @@ export default function MovieContextWrapper({children}){
         console.log(updatedWatchList);
         setWatchlist(updatedWatchList);
         localStorage.setItem("watchlist", JSON.stringify(updatedWatchList));
+        toast.success(`${movie.title || movie.name || "Project"} Added`, {
+            className: "watchlist-toast-shell watchlist-toast-shell--enter",
+        });
     }
 
     const removeFromWatchlist = (movie) => {
@@ -18,6 +22,9 @@ export default function MovieContextWrapper({children}){
         
         setWatchlist(filteredMovies);
         localStorage.setItem("watchlist", JSON.stringify(filteredMovies));
+        toast.error(`${movie.title || movie.name || "Project"} Removed`, {
+            className: "watchlist-toast-shell watchlist-toast-shell--enter",
+        });
     }
 
     useEffect(() => {

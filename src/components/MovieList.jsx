@@ -17,7 +17,7 @@ const MovieList = () => {
 
     return (
         <div className="movie-list-page">
-            <h1 className="text-center font-bold">Trending Movies</h1>
+            <h1 className="mb-2 text-center text-sm font-bold sm:text-3xl">Trending Movies</h1>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-6 gap-y-8 p-4">
                 {movies.map(movie => (

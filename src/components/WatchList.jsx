@@ -65,10 +65,10 @@ function Watchlist() {
   }, [watchlist, search, currGenre]);
 
   return (
-    <div className="mt-20 px-4 sm:px-8">
+    <div className="mt-28 px-4 sm:px-8">
       
       {/* Searchbar */}
-      <div className="flex justify-center my-10">
+      <div className="flex justify-center mt-8 mb-4">
         <input
           placeholder="Search Your Watchlist"
           className="rounded-xl h-[3rem] w-[12rem] bg-gray200 px-4 outline-none border border-slate-600"
@@ -79,7 +79,7 @@ function Watchlist() {
       </div>
 
       {/* Genres */}
-      <div className="flex flex-wrap justify-center gap-2 px-2 sm:px-0 my-4">
+      <div className="flex flex-wrap justify-center gap-2 px-2 sm:px-0 mb-4">
         {genreList.map((genre) => (
           <div
             key={genre}
