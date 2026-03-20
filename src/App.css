@@ -193,6 +193,40 @@
   }
 }
 
+.banner-marquee {
+  position: relative;
+  overflow: hidden;
+}
+
+.banner-marquee__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.72),
+    rgba(0, 0, 0, 0.18)
+  );
+}
+
+.banner-slide {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.banner-slide-single {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.banner-slide-image {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  object-position: center center;
+}
+
 .movie-list-page {
   display: flex;
   flex-direction: column;
