@@ -6,27 +6,40 @@ function Banner() {
 
   useEffect(() => {
     const getData = async () => {
-      const res = await fetch(
-        `https://api.themoviedb.org/3/trending/movie/day?api_key=3aec63790d50f3b9fc2efb4c15a8cf99&language=en-US&page=1`
-      );
-      const data = await res.json();
-      const { backdrop_path, title } = data.results[0];
-      setBannerImage(`https://image.tmdb.org/t/p/original${backdrop_path}`);
-      setMovieTitle(title);
+      try {
+        const res = await fetch(
+          "https://api.themoviedb.org/3/trending/movie/day?api_key=3aec63790d50f3b9fc2efb4c15a8cf99&language=en-US&page=1"
+        );
+        const data = await res.json();
+
+        const movie = data.results[0];
+        setBannerImage(
+          `https://image.tmdb.org/t/p/original${movie.backdrop_path}`
+        );
+        setMovieTitle(movie.title);
+      } catch (error) {
+        console.error("Error fetching banner:", error);
+      }
     };
+
     getData();
   }, []);
 
   return (
-    <div
-      className="
-        mt-24
-        h-[40vh] sm:h-[56vh] md:h-[74vh]
-        bg-center bg-cover flex items-end
-      "
-      style={{ backgroundImage: `url(${bannerImage})` }}
-    >
-      <div className="w-full text-center px-2 pb-6">
+    <div className="relative mt-24 h-[40vh] sm:h-[56vh] md:h-[74vh] w-full overflow-hidden">
+      
+      {/* Image: fills width, keeps top visible */}
+      <img
+        src={bannerImage}
+        alt={movieTitle}
+        className="w-full h-full object-cover object-top"
+      />
+
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+
+      {/* Movie Title */}
+      <div className="absolute bottom-6 w-full text-center px-2">
         <div
           className="
             inline-block 
