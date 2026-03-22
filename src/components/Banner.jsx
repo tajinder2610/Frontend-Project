@@ -44,7 +44,7 @@ function Banner() {
           className="
             inline-block 
             bg-black/60 text-white 
-            text-sm sm:text-xl md:text-3xl
+            text-xs sm:text-lg md:text-2xl
             px-4 py-2 sm:px-8 sm:py-3
             rounded
             truncate max-w-full
