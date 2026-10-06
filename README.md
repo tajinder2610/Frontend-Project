@@ -1,37 +1,35 @@
-# React + Vite
+# Dope Moviez
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A movie discovery and watchlist app built with Next.js App Router, React, TypeScript, Redux Toolkit, and Tailwind CSS.
 
-Currently, two official plugins are available:
+## Requirements
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Node.js 20.9 or newer
+- npm
+- A TMDB API key for movie data
 
-## React Compiler
+## Setup
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```powershell
+npm install
+Copy-Item .env.example .env.local
+```
 
-## Expanding the ESLint configuration
+Set `NEXT_PUBLIC_TMDB_API_KEY` in `.env.local`. This follows the existing Vite implementation's direct browser-to-TMDB request pattern. `NEXT_PUBLIC_` values are bundled into browser code, so this key is public; never use a private credential here. Do not commit `.env.local`.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Commands
 
+```powershell
+npm run dev
+npm run typecheck
+npm run lint
+npm run build
+npm run start
+npm run docs:migration
+```
 
-This is a common routing issue in React when using client-side routing with react-router.
+Routes are `/`, `/watchlist`, and `/benchmark`. Movie requests are made directly from the browser to TMDB, matching the original app's request path.
 
-✅ Why It Happens
+## Migration Record
 
-When you navigate from Home → Watchlist using a <Link>, React Router handles it on the client-side — works perfectly.
-
-When you type /watchlist manually in the browser or refresh, the browser sends a request to the server at /watchlist.
-
-If your server (e.g., Node/Express, Vite, or static hosting) doesn’t handle all routes to serve index.html, you get “Page not found”.
-
-Basically, your server doesn’t know about client-side routes.
-
-/* /index.html 200
-
-/* → matches all routes
-
-/index.html → serves your SPA entry point
-
-200 → tells Netlify to always return index.html for client-side routes
+The detailed component-by-component migration, decisions, trade-offs, security notes, and verification record is in [nextjs-typescript-migration.docx](nextjs-typescript-migration.docx). Regenerate it with `npm run docs:migration`; its source is `scripts/generate-migration-doc.mjs`.

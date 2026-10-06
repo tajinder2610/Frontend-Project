@@ -1,8 +1,28 @@
-import { Profiler, useEffect, useMemo, useRef, useState } from "react";
+"use client";
+
+import { Profiler, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 const GENRES = ["Action", "Comedy", "Drama", "Sci-Fi", "Thriller"];
 
-function buildMovies(size) {
+type BenchmarkLabel = "baseline" | "optimized";
+
+interface BenchmarkMovie {
+  id: number;
+  title: string;
+  vote_average: number;
+  genre: string;
+}
+
+interface BenchmarkSummary {
+  label: BenchmarkLabel;
+  actualDuration: number;
+  wallTime: number;
+  commits: number;
+  filterRuns: number;
+  visibleRows: number;
+}
+
+function buildMovies(size: number): BenchmarkMovie[] {
   return Array.from({ length: size }, (_, index) => ({
     id: index + 1,
     title: `Movie ${index + 1}`,
@@ -11,7 +31,7 @@ function buildMovies(size) {
   }));
 }
 
-function RunCard({ title, summary }) {
+function RunCard({ title, summary }: { title: string; summary?: BenchmarkSummary }) {
   return (
     <div className="rounded-xl border border-slate-700 bg-slate-900/70 p-4 shadow-lg">
       <h3 className="text-lg font-semibold text-white">{title}</h3>
@@ -36,6 +56,12 @@ function BenchmarkRunner({
   optimized,
   onComplete,
   label,
+}: {
+  datasetSize: number;
+  iterations: number;
+  optimized: boolean;
+  onComplete: (summary: BenchmarkSummary) => void;
+  label: BenchmarkLabel;
 }) {
   const [tick, setTick] = useState(0);
   const [searchTerm] = useState("Movie 2");
@@ -46,7 +72,7 @@ function BenchmarkRunner({
   const startedAt = useRef(performance.now());
   const movies = useMemo(() => buildMovies(datasetSize), [datasetSize]);
 
-  const computeFilteredMovies = () => {
+  const computeFilteredMovies = useCallback(() => {
     filterRuns.current += 1;
 
     return movies
@@ -56,11 +82,13 @@ function BenchmarkRunner({
       .filter((movie) =>
         currentGenre === "All Genres" ? true : movie.genre === currentGenre
       );
-  };
+  }, [movies, searchTerm, currentGenre]);
 
-  const filteredMovies = optimized
-    ? useMemo(computeFilteredMovies, [movies, searchTerm, currentGenre])
-    : computeFilteredMovies();
+  const memoizedMovies = useMemo(
+    () => optimized ? computeFilteredMovies() : null,
+    [computeFilteredMovies, optimized]
+  );
+  const filteredMovies = optimized ? memoizedMovies ?? [] : computeFilteredMovies();
 
   useEffect(() => {
     if (tick >= iterations) {
@@ -110,8 +138,8 @@ function BenchmarkRunner({
 function PerformanceBenchmark() {
   const [datasetSize, setDatasetSize] = useState(5000);
   const [iterations, setIterations] = useState(150);
-  const [activeRun, setActiveRun] = useState(null);
-  const [results, setResults] = useState({});
+  const [activeRun, setActiveRun] = useState<BenchmarkLabel | null>(null);
+  const [results, setResults] = useState<Partial<Record<BenchmarkLabel, BenchmarkSummary>>>({});
 
   const baseline = results.baseline;
   const optimized = results.optimized;
@@ -127,7 +155,7 @@ function PerformanceBenchmark() {
     setActiveRun("baseline");
   };
 
-  const handleComplete = (summary) => {
+  const handleComplete = (summary: BenchmarkSummary) => {
     setResults((current) => ({
       ...current,
       [summary.label]: summary,

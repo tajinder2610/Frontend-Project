@@ -1,39 +1,47 @@
-import React, { useEffect, useState } from "react";
+"use client";
+
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import { getTrendingMovies } from "../lib/tmdb";
 
 function Banner() {
   const [bannerImage, setBannerImage] = useState("");
   const [movieTitle, setMovieTitle] = useState("");
 
   useEffect(() => {
+    const controller = new AbortController();
     const getData = async () => {
       try {
-        const res = await fetch(
-          "https://api.themoviedb.org/3/trending/movie/day?api_key=3aec63790d50f3b9fc2efb4c15a8cf99&language=en-US&page=1"
-        );
-        const data = await res.json();
-
-        const movie = data.results[0];
+        const movies = await getTrendingMovies(1, controller.signal);
+        const movie = movies[0];
+        if (!movie?.backdrop_path) return;
         setBannerImage(
           `https://image.tmdb.org/t/p/original${movie.backdrop_path}`
         );
-        setMovieTitle(movie.title);
-      } catch (error) {
-        console.error("Error fetching banner:", error);
+        setMovieTitle(movie.title ?? "Trending Movies");
+      } catch {
+        return;
       }
     };
 
-    getData();
+    void getData();
+    return () => controller.abort();
   }, []);
 
   return (
     <div className="relative mt-24 h-[40vh] sm:h-[56vh] md:h-[74vh] w-full overflow-hidden">
       
       {/* Image: fills width, keeps top visible */}
-      <img
-        src={bannerImage}
-        alt={movieTitle}
-        className="w-full h-full object-cover object-top"
-      />
+      {bannerImage && (
+        <Image
+          src={bannerImage}
+          alt={movieTitle}
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-top"
+        />
+      )}
 
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
